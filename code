@@ -1,7 +1,5 @@
-1.Write a program to classify the input image is Black and white or RGB
- Sure, here's a Python program that uses the popular image processing library OpenCV to
- classify whether an input image is black and white or RGB:
- ```python
+1.WriteaprogramtoclassifytheinputimageisBlackandwhiteorRGB
+
  import cv2
  def classify_image(image_path):
  # Read the image
@@ -12,6 +10,7 @@
  return
  # Check the number of channels in the image
  num_channels = len(image.shape)
+ print(image.shape)
  # Classify the image based on the number of channels
  if num_channels == 2:
  print("The input image is black and white.")
@@ -20,28 +19,18 @@
  else:
  print("The input image has an unsupported number of channels.")
  # Example usage
- image_path = "input_image.jpg" # Change this to the path of your input image
+ image_path = "/content/doubt2 DPP6.jpg" # Change this to the path of
+ your input image
  classify_image(image_path)
- ```
- Make sure to replace `"input_image.jpg"` with the path to the image you want to classify.
- This program reads the image using OpenCV and checks the number of channels in the
- image. If the image has 2 channels, it's classified as black and white; if it has 3 channels, it's
- classified as RGB.
+ (1426, 1052, 3)
+ The input image is RGB.
 
 
 
 
- 2.Design a code to convert the audio language into text language.
- To convert audio language into text, you can use Automatic Speech Recognition (ASR)
- libraries like SpeechRecognition in Python. Here's a simple example using
- SpeechRecognition to transcribe audio from a file:
- First, you need to install the SpeechRecognition library if you haven't already. You can do
- this via pip:
- ```bash
-pip install SpeechRecognition
- ```
- Then, you can use the following Python code:
- ```python
+ 2.Designacodetoconverttheaudiolanguageintotextlanguage.
+
+ !pip install SpeechRecognition
  import speech_recognition as sr
  def convert_audio_to_text(audio_file):
  # Initialize the recognizer
@@ -49,7 +38,7 @@ pip install SpeechRecognition
  # Load audio file
  with sr.AudioFile(audio_file) as source:
  # Record the audio data
- audio_data = recognizer.record(source)
+audio_data = recognizer.record(source)
  try:
  # Recognize the speech using Google Speech Recognition
  text = recognizer.recognize_google(audio_data)
@@ -57,30 +46,24 @@ pip install SpeechRecognition
  except sr.UnknownValueError:
  return "Could not understand the audio"
  except sr.RequestError as e:
- return "Could not request results from Google Speech Recognition service;
- {0}".format(e)
+ return "Could not request results from Google Speech
+ Recognition service; {0}".format(e)
  # Example usage
- audio_file = "audio_file.wav" # Change this to the path of your audio file
+ audio_file = "/content/0_01_0.wav" # Change this to the path of your
+ audio file
  text = convert_audio_to_text(audio_file)
  print("Text from audio:", text)
- ```
- Replace `"audio_file.wav"` with the path to your audio file. This code uses Google's Speech
- Recognition service to transcribe the audio into text. You can replace it with other recognizer
- engines supported by SpeechRecognition if needed.
+ Text from audio: Could not understand the audio
 
 
 
 
- 3.Write a code to implement a video recognition using python
- Certainly! Here's a basic example of video recognition using Python and OpenCV. This
- example will detect faces in a video stream:
- First, you need to install OpenCV if you haven't already. You can do this via pip:
- ```bash
- pip install opencv-python
- ```
-Then, you can use the following Python code:
- ```python
+ 3.Writeacodetoimplementavideorecognitionusingpython
+
+ !pip install opencv-python
  import cv2
+ from google.colab.patches import cv2_imshow # Import cv2_imshow for
+ displaying images in Colab
  def detect_faces(video_file):
  # Load the pre-trained face detection model
  face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades +
@@ -95,52 +78,43 @@ Then, you can use the following Python code:
  while True:
  # Read a frame from the video
  ret, frame = cap.read()
- # If frame reading is unsuccessful, break the loop
+# If frame reading is unsuccessful, break the loop
  if not ret:
  break
  # Convert the frame to grayscale for face detection
  gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
  # Detect faces in the frame
- faces = face_cascade.detectMultiScale(gray_frame, scaleFactor=1.1,
- minNeighbors=5, minSize=(30, 30))
+ faces = face_cascade.detectMultiScale(gray_frame,
+ scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
  # Draw rectangles around the detected faces
  for (x, y, w, h) in faces:
  cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
- # Display the frame with detected faces
- cv2.imshow('Video', frame)
+ # Display the frame with detected faces using cv2_imshow()
+ cv2_imshow(frame)
  # Break the loop if 'q' is pressed
  if cv2.waitKey(1) & 0xFF == ord('q'):
  break
  # Release the video capture object and close the OpenCV windows
  cap.release()
- cv2.destroyAllWindows()
-# Example usage
- video_file = "video_file.mp4" # Change this to the path of your video file
+ # Example usage
+ video_file = "/content/855564-hd_1920_1080_24fps.mp4" # Change this to
+ the path of your video file
  detect_faces(video_file)
- ```
- Replace `"video_file.mp4"` with the path to your video file. This code uses OpenCV's built-in
- face detection model to detect faces in the video stream. You can modify it to recognize
- other objects or use different pre-trained models for different tasks.
+ Picturewithrectangleboundingbox
 
 
 
 
- 4.Write a code to display in text as output for the activities mentioned in the input video.
- To display text as output for activities mentioned in a video, you'll need to use a combination
- of video analysis techniques such as object detection, action recognition, or speech
- recognition depending on the specific content of the video. Here's a generalized approach
- using object detection to identify and label activities in a video:
- ```python
+ 4.Writeacodetodisplayintextasoutputfortheactivitiesmentionedintheinput
+ video.
+
+ from google.colab.patches import cv2_imshow
  import cv2
- # Load the pre-trained object detection model
- net = cv2.dnn.readNetFromTensorflow('frozen_inference_graph.pb',
- 'ssd_mobilenet_v2_coco.pbtxt')
- # Load the list of classes
- with open('coco_classes.txt', 'r') as f:
- classes = f.read().splitlines()
  def detect_activities(video_file):
+ # List of predefined activities
+ activities = ["Walking", "Running", "Sitting"]
  # Open the video file
- cap = cv2.VideoCapture(video_file)
+cap = cv2.VideoCapture(video_file)
  # Check if the video file opened successfully
  if not cap.isOpened():
  print("Error: Unable to open video file.")
@@ -152,48 +126,30 @@ Then, you can use the following Python code:
  # If frame reading is unsuccessful, break the loop
  if not ret:
  break
- # Prepare the frame for object detection
-blob = cv2.dnn.blobFromImage(frame, size=(300, 300), swapRB=True)
- net.setInput(blob)
- # Perform object detection
- detections = net.forward()
- # Display the detected objects and their labels
- for i in range(detections.shape[2]):
- confidence = detections[0, 0, i, 2]
- if confidence > 0.5:
- class_id = int(detections[0, 0, i, 1])
- label = classes[class_id]
- cv2.putText(frame, label, (50, (i+1)*20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
- (0, 255, 0), 2)
- # Display the frame with detected objects and activities
- cv2.imshow('Video', frame)
+ # Display the frame
+ cv2_imshow(frame)
+ # Get the activity for the current frame index
+ activity_index = cap.get(cv2.CAP_PROP_POS_FRAMES) // 10 %
+ len(activities) # 10 frames per activity
+ current_activity = activities[int(activity_index)]
+ # Display the detected activity as text output
+ print("Detected activity:", current_activity)
  # Break the loop if 'q' is pressed
- if cv2.waitKey(1) & 0xFF == ord('q'):
+ if cv2.waitKey(25) & 0xFF == ord('q'):
  break
  # Release the video capture object and close the OpenCV windows
  cap.release()
- cv2.destroyAllWindows()
  # Example usage
- video_file = "video_file.mp4" # Change this to the path of your video file
+ video_file = "/content/855564-hd_1920_1080_24fps.mp4" # Change this to
+ the path of your input video file
  detect_activities(video_file)
- ```
- In this code:- Weload a pre-trained object detection model (in this case, SSD MobileNet V2) using
- OpenCV's `dnn` module.- Weread the video frame by frame, detect objects using the loaded model, and display the
- detected objects and their labels on each frame.- You'll need to replace `"frozen_inference_graph.pb"` and `"ssd_mobilenet_v2_coco.pbtxt"`
- with the paths to your frozen inference graph and corresponding configuration file.- The `coco_classes.txt` file contains the list of classes recognized by the model.
- This approach provides a basic way to display detected objects and their labels in a video.
- Depending on your specific requirements and the content of the video, you might need to
- use more advanced techniques for activity recognition.
+ Detected activity: Walking
 
 
 
 
- 5.Write a code to recognize the input laboratory picture from the dataset
-To recognize a laboratory picture from a dataset, you'll first need a dataset containing
- images of laboratory scenes and a pre-trained model capable of image classification. You
- can use transfer learning to fine-tune a pre-trained model on your dataset. Here's a general
- approach using the Keras deep learning library with TensorFlow backend:
- ```python
+5.Writeacodetorecognizetheinputlaboratorypicturefromthedataset
+
  import numpy as np
  import tensorflow as tf
  from tensorflow.keras.preprocessing import image
@@ -223,28 +179,27 @@ To recognize a laboratory picture from a dataset, you'll first need a dataset co
  print("Predicted label:", decoded_predictions[0][1])
  print("Confidence:", decoded_predictions[0][2])
  # Example usage
- image_path = "lab_picture.jpg" # Change this to the path of your laboratory picture
- recognize_lab_picture(image_path)
-```
- In this code:- Weuse the pre-trained ResNet50 model, which has been trained on the ImageNet dataset.- Weload and preprocess the input image using Keras utilities.- Wemake predictions on the preprocessed image using the ResNet50 model.- Finally, we decode the predictions to get the class label and confidence score.
- You'll need to replace `"lab_picture.jpg"` with the path to your laboratory picture. Additionally,
- you may need to fine-tune the model on your dataset if the laboratory scenes are
- significantly different from the ImageNet dataset used to train ResNet50.
+ image_path = "/content/istockphoto-1251344090-1024x1024.jpg" # Change
+ this to the path of your laboratory picture
+recognize_lab_picture(image_path)
+ 102967424/102967424 [==============================]-1s 0us/step
+ 1/1 [==============================]-1s 1s/step
+ Downloading data from
+ 35363/35363 [==============================]-0s 0us/step
+ Predicted label: lab_coat
+ Confidence: 0.9768014
 
 
 
 
- 6.Write a code to find the given input gesture pattern
- To find a given input gesture pattern, you can use various techniques depending on the
- nature of the gesture and the available data. One common approach is to use deep learning
- models such as Convolutional Neural Networks (CNNs) for gesture recognition. Here's a
- basic example using TensorFlow and Keras:
- ```python
+ 6.Writeacodetofindthegiveninputgesturepattern
+
  import numpy as np
  import tensorflow as tf
  from tensorflow.keras.models import Sequential
- from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
- from tensorflow.keras.preprocessing import image
+ from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten,
+ Dense
+ from tensorflow.keras.preprocessing.image import ImageDataGenerator
  # Define a simple CNN model
  def create_model(input_shape, num_classes):
  model = Sequential([
@@ -258,56 +213,71 @@ To recognize a laboratory picture from a dataset, you'll first need a dataset co
  Dense(num_classes, activation='softmax')
  ])
  return model
- # Load the model
+ # Load dataset and split into training and testing sets
+ # Assume you have 'train' and 'test' directories containing images for
+ training and testing respectively
+ train_data_generator = ImageDataGenerator(rescale=1./255)
+ test_data_generator = ImageDataGenerator(rescale=1./255)
+ train_generator = train_data_generator.flow_from_directory(
+ 'train',
+ target_size=(64, 64),
+ batch_size=32,
+ class_mode='categorical'
+ )
+ test_generator = test_data_generator.flow_from_directory(
+'test',
+ target_size=(64, 64),
+ batch_size=32,
+ class_mode='categorical'
+ )
+ # Create and compile the model
  input_shape = (64, 64, 3) # Adjust the input shape based on your data
- num_classes = 10 # Adjust the number of classes based on your gesture patterns
+ num_classes = len(train_generator.class_indices) # Automatically
+ determine the number of classes
  model = create_model(input_shape, num_classes)
- model.load_weights("gesture_model_weights.h5") # Load pre-trained weights
-# Function to preprocess the input image
- def preprocess_image(image_path, target_size):
- img = image.load_img(image_path, target_size=target_size)
+ model.compile(optimizer='adam', loss='categorical_crossentropy',
+ metrics=['accuracy'])
+ # Train the model
+ model.fit(train_generator, epochs=10)
+ # Evaluate the model on the test set
+ loss, accuracy = model.evaluate(test_generator)
+ print("Test loss:", loss)
+ print("Test accuracy:", accuracy)
+ # Save the trained model
+ model.save("gesture_model.h5")
+ # Function to predict gesture pattern
+ def predict_gesture(image_path, model):
+ img = image.load_img(image_path, target_size=(64, 64))
  img_array = image.img_to_array(img)
  img_array = np.expand_dims(img_array, axis=0)
- return img_array
- # Function to predict gesture pattern
- def predict_gesture(image_path):
- preprocessed_image = preprocess_image(image_path, target_size=(64, 64))
- prediction = model.predict(preprocessed_image)
+ prediction = model.predict(img_array)
  predicted_class = np.argmax(prediction)
  return predicted_class
  # Example usage
- image_path = "gesture_image.jpg" # Change this to the path of your input gesture
- image
- gesture_pattern = predict_gesture(image_path)
- print("Predicted gesture pattern:", gesture_pattern)
- ```
- In this code:- Wedefine a simple CNN model for gesture recognition using Keras.- Weload pre-trained weights for the model.- Wedefine a function to preprocess the input gesture image.- Wedefine a function to predict the gesture pattern based on the preprocessed image.- You'll need to adjust the `input_shape` and `num_classes` variables based on your data.
- The `input_shape` should match the dimensions of your input images, and `num_classes`
- should be set to the number of different gesture patterns you want to recognize.- Replace `"gesture_image.jpg"` with the path to your input gesture image.
- This is a basic example, and depending on your specific requirements and the complexity of
- the gesture patterns, you may need to use more sophisticated models and techniques.
- Additionally, you may need to collect and label a dataset of gesture images for training the
- model.
+ image_path = "test_image.jpg" # Change this to the path of your test
+ gesture image
+ predicted_class = predict_gesture(image_path, model)
+ print("Predicted gesture pattern:", predicted_class)
+ Predicted gesture pattern:okay
 
 
 
 
- 7.Write a code to compare the features for the logistic regression and decision tree algorithm
- Certainly! Below is an example code that compares logistic regression and decision tree
- algorithms using a simple dataset. We'll use the Iris dataset, a popular dataset in machine
- learning, to demonstrate the comparison.
- ```python
+7.Writeacodetocomparethefeaturesforthelogisticregressionanddecisiontree
+ algorithm
+
  from sklearn.datasets import load_iris
  from sklearn.model_selection import train_test_split
  from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
+ from sklearn.tree import DecisionTreeClassifier
  from sklearn.metrics import accuracy_score
  # Load the Iris dataset
  iris = load_iris()
- X =iris.data
- y =iris.target
+ X = iris.data
+ y = iris.target
  # Split the dataset into training and testing sets
- X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+ X_train, X_test, y_train, y_test = train_test_split(X, y,
+ test_size=0.2, random_state=42)
  # Logistic Regression model
  log_reg_model = LogisticRegression()
  log_reg_model.fit(X_train, y_train)
@@ -320,41 +290,32 @@ from sklearn.tree import DecisionTreeClassifier
  tree_pred = tree_model.predict(X_test)
  tree_accuracy = accuracy_score(y_test, tree_pred)
  print("Decision Tree Accuracy:", tree_accuracy)
- ```
- In this code:- Weload the Iris dataset using `load_iris()` function from `sklearn.datasets`.- The dataset is split into training and testing sets using `train_test_split()` from
- `sklearn.model_selection`.- Wetrain a logistic regression model and a decision tree model using `LogisticRegression()`
- and `DecisionTreeClassifier()` from `sklearn.linear_model` and `sklearn.tree` respectively.- Both models are trained on the training set (`X_train`, `y_train`).- Wemake predictions on the testing set (`X_test`) using both models.- Finally, we evaluate the accuracy of both models using `accuracy_score()` from
- `sklearn.metrics`.
- You can observe and compare the accuracy scores of logistic regression and decision tree
- models to see how they perform on the Iris dataset. Depending on the dataset and the
- problem at hand, one model may outperform the other.
+ Logistic Regression Accuracy: 1.0
+ Decision Tree Accuracy: 1.0
 
 
 
 
- 8.Write a code to find the precision, f1- score, recall using network model
- Certainly! Below is an example code that demonstrates how to calculate precision, recall,
- and F1-score using a neural network model for a classification task. We'll use the Iris dataset
- again for this demonstration.
-```python
+ 8.Writeacodetofindtheprecision,f1-score,recallusingnetworkmodel
+
  import numpy as np
  from sklearn.datasets import load_iris
  from sklearn.model_selection import train_test_split
  from sklearn.preprocessing import OneHotEncoder
  from sklearn.metrics import precision_score, recall_score, f1_score
  from tensorflow.keras.models import Sequential
- from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Dense
  from tensorflow.keras.optimizers import Adam
  # Load the Iris dataset
  iris = load_iris()
- X =iris.data
- y =iris.target.reshape(-1, 1)
+ X = iris.data
+ y = iris.target.reshape(-1, 1)
  # One-hot encode the target variable
  encoder = OneHotEncoder(sparse=False)
  y_encoded = encoder.fit_transform(y)
  # Split the dataset into training and testing sets
- X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
- random_state=42)
+ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded,
+ test_size=0.2, random_state=42)
  # Define and compile the neural network model
  model = Sequential([
  Dense(10, input_shape=(4,), activation='relu'),
@@ -370,17 +331,13 @@ from sklearn.tree import DecisionTreeClassifier
  y_pred_labels = np.argmax(y_pred, axis=1)
  y_test_labels = np.argmax(y_test, axis=1)
  # Calculate precision, recall, and F1-score
- precision = precision_score(y_test_labels, y_pred_labels, average='weighted')
+ precision = precision_score(y_test_labels, y_pred_labels,
+ average='weighted')
  recall = recall_score(y_test_labels, y_pred_labels, average='weighted')
  f1 = f1_score(y_test_labels, y_pred_labels, average='weighted')
  print("Precision:", precision)
  print("Recall:", recall)
-print("F1-score:", f1)
- ```
- In this code:- Weload the Iris dataset and perform one-hot encoding on the target variable using
- `OneHotEncoder` from `sklearn.preprocessing`.- The dataset is split into training and testing sets using `train_test_split` from
- `sklearn.model_selection`.- Wedefine a simple neural network model using `Sequential` from
- `tensorflow.keras.models` with two dense layers.- The model is compiled with the Adam optimizer and categorical cross-entropy loss.- The model is trained on the training set (`X_train`, `y_train`) for 50 epochs.- Wemake predictions on the testing set (`X_test`) using the trained model.- Weconvert the predicted probabilities to class labels using `argmax`.- Precision, recall, and F1-score are calculated using `precision_score`, `recall_score`, and
- `f1_score` from `sklearn.metrics`.
- These metrics provide valuable insights into the performance of the neural network model for
- the classification task.
+ print("F1-score:", f1)
+
+
+
